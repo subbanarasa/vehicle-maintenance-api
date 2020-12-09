@@ -17,21 +17,21 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long vehicleId;
 
-    private Long userId;  //Owner ID
+    private Long ownerId;  //Owner ID
 
     private String registrationNumber;
 
-    private String manufacture;
+    private String manufactureName;
 
-    private String model;
+    private String carModel;
 
     private String yearOfPurchase;
 
     @CreatedDate
-    private LocalDateTime created;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updated;
+    private LocalDateTime updatedAt;
 
 
 }

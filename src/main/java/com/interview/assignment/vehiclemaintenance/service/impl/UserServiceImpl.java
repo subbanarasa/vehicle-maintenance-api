@@ -1,5 +1,6 @@
 package com.interview.assignment.vehiclemaintenance.service.impl;
 
+import com.interview.assignment.vehiclemaintenance.exception.ResourceNotFoundException;
 import com.interview.assignment.vehiclemaintenance.model.User;
 import com.interview.assignment.vehiclemaintenance.repository.UserRepository;
 import com.interview.assignment.vehiclemaintenance.service.UserService;
@@ -58,6 +59,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            userRepository.delete(optionalUser.get());
+        } else {
+            throw new ResourceNotFoundException("User ID " + userId + " not found");
+        }
     }
 }

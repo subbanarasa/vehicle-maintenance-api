@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/user")
 public class UserResource {
 
     private static Logger logger = LoggerFactory.getLogger(UserResource.class);
@@ -24,7 +25,7 @@ public class UserResource {
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<?> saveUser(@RequestBody User user) {
+    public ResponseEntity<StatusModel> saveUser(@RequestBody User user) {
         if (logger.isDebugEnabled()) {
             logger.debug("Save user request:" + user);
         }
@@ -32,7 +33,7 @@ public class UserResource {
         if (userSaved == null) {
             return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, user), HttpStatus.OK);
+            return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, userSaved), HttpStatus.OK);
         }
     }
 
@@ -45,7 +46,7 @@ public class UserResource {
         if (userSaved == null) {
             return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, user), HttpStatus.OK);
+            return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, userSaved), HttpStatus.OK);
         }
     }
 
