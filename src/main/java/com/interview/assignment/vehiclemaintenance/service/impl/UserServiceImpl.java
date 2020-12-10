@@ -1,5 +1,6 @@
 package com.interview.assignment.vehiclemaintenance.service.impl;
 
+import com.interview.assignment.vehiclemaintenance.exception.DuplicateException;
 import com.interview.assignment.vehiclemaintenance.exception.ResourceNotFoundException;
 import com.interview.assignment.vehiclemaintenance.model.User;
 import com.interview.assignment.vehiclemaintenance.repository.UserRepository;
@@ -20,6 +21,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
+        User savedUser = userRepository.findByCellPhone(user.getCellPhone());
+        if (savedUser != null) {
+            throw new DuplicateException("Duplicate user with Cellphone:" + user.getCellPhone());
+        }
         return userRepository.save(user);
     }
 
@@ -29,27 +34,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User searchUser(String cellPhone) {
+        User user = userRepository.findByCellPhone(cellPhone);
+        ;
+        if (user == null) {
+            throw new ResourceNotFoundException("User is not found for the cellPhone" + cellPhone);
+        }
+        return user;
+    }
+
+    @Override
     public User updateUser(Long userId, User user) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User userTmp = optionalUser.get();
-
             if (StringUtils.hasLength(user.getFirstName())) {
-                userTmp.setEmail(user.getFirstName());
+                userTmp.setFirstName(user.getFirstName());
             }
 
             if (StringUtils.hasLength(user.getLastName())) {
-                userTmp.setEmail(user.getLastName());
+                userTmp.setLastName(user.getLastName());
             }
 
             if (StringUtils.hasLength(user.getEmail())) {
                 userTmp.setEmail(user.getEmail());
             }
-
-            if (StringUtils.hasLength(user.getCellPhone())) {
-                userTmp.setEmail(user.getCellPhone());
-            }
-
             return userRepository.save(userTmp);
         }
 

@@ -1,6 +1,8 @@
 package com.interview.assignment.vehiclemaintenance.service.impl;
 
+import com.interview.assignment.vehiclemaintenance.exception.DuplicateException;
 import com.interview.assignment.vehiclemaintenance.exception.ResourceNotFoundException;
+import com.interview.assignment.vehiclemaintenance.model.User;
 import com.interview.assignment.vehiclemaintenance.model.Vehicle;
 import com.interview.assignment.vehiclemaintenance.repository.UserRepository;
 import com.interview.assignment.vehiclemaintenance.repository.VehicleRepository;
@@ -24,8 +26,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle saveVehicle(Vehicle vehicle) {
-        if (!userRepository.existsById(vehicle.getOwnerId())) {
-            throw new ResourceNotFoundException("Owner for owner ID " + vehicle.getOwnerId() + " not found");
+        Vehicle savedVehicle = vehicleRepository.findByRegistrationNumber(vehicle.getRegistrationNumber());
+        if (savedVehicle != null) {
+            throw new DuplicateException("Duplicate Vehicle with RegistrationNumber:" + vehicle.getRegistrationNumber());
         }
         return vehicleRepository.save(vehicle);
     }
@@ -36,20 +39,22 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    public Vehicle searchVehicle(String registrationNumber) {
+        Vehicle vehicle = vehicleRepository.findByRegistrationNumber(registrationNumber);
+        ;
+        if (vehicle == null) {
+            throw new ResourceNotFoundException("Vehicle is not found for the registrationNumber::" + registrationNumber);
+        }
+        return vehicle;
+    }
+
+    @Override
     public Vehicle updateVehicle(Long vehicleId, Vehicle vehicle) {
         if (!vehicleRepository.existsById(vehicleId)) {
             throw new ResourceNotFoundException("Vehicle ID " + vehicleId + " not found");
         }
 
-        if (vehicle.getOwnerId() != null && !userRepository.existsById(vehicle.getOwnerId())) {
-            throw new ResourceNotFoundException("Owner for owner ID " + vehicle.getOwnerId() + " not found");
-        }
-
         return vehicleRepository.findById(vehicleId).map(tmp -> {
-
-            if (vehicle.getOwnerId() != null) {
-                tmp.setOwnerId(vehicle.getOwnerId());
-            }
 
             if (StringUtils.hasLength(vehicle.getManufactureName())) {
                 tmp.setManufactureName(vehicle.getManufactureName());
@@ -57,10 +62,6 @@ public class VehicleServiceImpl implements VehicleService {
 
             if (StringUtils.hasLength(vehicle.getCarModel())) {
                 tmp.setCarModel(vehicle.getCarModel());
-            }
-
-            if (StringUtils.hasLength(vehicle.getRegistrationNumber())) {
-                tmp.setRegistrationNumber(vehicle.getRegistrationNumber());
             }
 
             if (StringUtils.hasLength(vehicle.getRegistrationNumber())) {

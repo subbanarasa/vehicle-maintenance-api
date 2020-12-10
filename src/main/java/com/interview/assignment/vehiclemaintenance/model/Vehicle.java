@@ -17,9 +17,7 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long vehicleId;
 
-    private Long ownerId;  //Owner ID
-
-    private String registrationNumber;
+    private String registrationNumber; //unique for the vehicle.
 
     private String manufactureName;
 

@@ -11,24 +11,21 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class VehicleOwnership {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long userId;
+    private Long id;
 
-    private String firstName;
+    private Long ownerId;
 
-    private String lastName;
-
-    private String email;
-
-    private String cellPhone;  //Unique for the user
+    private Long vehicleId;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
 
 }

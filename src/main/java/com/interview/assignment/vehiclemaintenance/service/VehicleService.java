@@ -10,6 +10,8 @@ public interface VehicleService {
 
     Optional<Vehicle> getVehicle(Long vehicleId);
 
+    Vehicle searchVehicle(String registrationNumber);
+
     Vehicle updateVehicle(Long vehicleId, Vehicle vehicle);
 
     void deleteVehicle(Long vehicleId);

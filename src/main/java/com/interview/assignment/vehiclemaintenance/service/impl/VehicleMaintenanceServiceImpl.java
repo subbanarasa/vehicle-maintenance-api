@@ -8,6 +8,8 @@ import com.interview.assignment.vehiclemaintenance.service.VehicleMaintenanceSer
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +35,11 @@ public class VehicleMaintenanceServiceImpl implements VehicleMaintenanceService 
     @Override
     public Optional<MaintenanceRecord> getMaintenanceRecord(Long recordId) {
         return vehicleMaintenanceRepository.findById(recordId);
+    }
+
+    @Override
+    public List<MaintenanceRecord> searchMaintenanceRecordsForVehicle(Long vehicleId) {
+        return vehicleMaintenanceRepository.findAllByVehicleId(vehicleId);
     }
 
     @Override

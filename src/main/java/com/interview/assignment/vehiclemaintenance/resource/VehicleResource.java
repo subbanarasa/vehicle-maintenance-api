@@ -26,12 +26,10 @@ public class VehicleResource {
 
     @PostMapping(value = "/save")
     public ResponseEntity<StatusModel> saveVehicle(@RequestBody Vehicle vehicle) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Save Vehicle request:" + vehicle);
-        }
+        logger.info("Save Vehicle request:" + vehicle);
         Vehicle vehicleSaved = vehicleService.saveVehicle(vehicle);
         if (vehicleSaved == null) {
-            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
+            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, vehicleSaved), HttpStatus.OK);
         }
@@ -39,12 +37,10 @@ public class VehicleResource {
 
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<?> updateVehicle(@PathVariable Long id, @RequestBody Vehicle vehicle) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("update Vehicle for id:" + id + "|vehicle" + vehicle);
-        }
+        logger.info("update Vehicle for id:" + id + "|vehicle" + vehicle);
         Vehicle vehicleSaved = vehicleService.updateVehicle(id, vehicle);
         if (vehicleSaved == null) {
-            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
+            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, vehicleSaved), HttpStatus.OK);
         }
@@ -52,24 +48,26 @@ public class VehicleResource {
 
     @GetMapping(value = "/get/{id}")
     public ResponseEntity<?> getVehicle(@PathVariable Long id) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Get Vehicle for id:" + id);
-        }
+        logger.info("Get Vehicle for id:" + id);
         Optional<Vehicle> optionalVehicle = vehicleService.getVehicle(id);
         if (optionalVehicle.isEmpty()) {
-            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
+            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, optionalVehicle.get()), HttpStatus.OK);
         }
     }
 
+    @GetMapping(value = "/search/{registrationNumber}")
+    public ResponseEntity<?> searchVehicle(@PathVariable String registrationNumber) {
+        logger.info("Search vehicle for registrationNumber:" + registrationNumber);
+        return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, vehicleService.searchVehicle(registrationNumber)), HttpStatus.OK);
+    }
+
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteVehicle(@PathVariable Long id) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Delete vehicle for id:" + id);
-        }
+        logger.info("Delete vehicle for id:" + id);
         vehicleService.deleteVehicle(id);
-        return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, null), HttpStatus.OK);
+        return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG), HttpStatus.OK);
     }
 
 }

@@ -26,9 +26,7 @@ public class UserResource {
 
     @PostMapping(value = "/save")
     public ResponseEntity<StatusModel> saveUser(@RequestBody User user) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Save user request:" + user);
-        }
+        logger.info("Save user request:" + user);
         User userSaved = userService.saveUser(user);
         if (userSaved == null) {
             return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
@@ -39,9 +37,7 @@ public class UserResource {
 
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("update user for id:" + id + "|User" + user);
-        }
+        logger.info("update user for id:" + id + "|User" + user);
         User userSaved = userService.updateUser(id, user);
         if (userSaved == null) {
             return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
@@ -52,22 +48,25 @@ public class UserResource {
 
     @GetMapping(value = "/get/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Get user for id:" + id);
-        }
+        logger.info("Get user for id:" + id);
         Optional<User> optionalUser = userService.getUser(id);
         if (optionalUser.isEmpty()) {
-            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
+            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, optionalUser.get()), HttpStatus.OK);
         }
     }
 
+    @GetMapping(value = "/search/{cellPhone}")
+    public ResponseEntity<?> searchUser(@PathVariable String cellPhone) {
+        logger.info("Search user for cellphone:" + cellPhone);
+        return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, userService.searchUser(cellPhone)), HttpStatus.OK);
+    }
+
+
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Delete user for id:" + id);
-        }
+        logger.info("Delete user for id:" + id);
         userService.deleteUser(id);
         return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, null), HttpStatus.OK);
     }

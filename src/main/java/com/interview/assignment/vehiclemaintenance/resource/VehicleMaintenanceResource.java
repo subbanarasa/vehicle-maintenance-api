@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,9 +39,7 @@ public class VehicleMaintenanceResource {
 
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<?> updateMaintenanceRecord(@PathVariable Long id, @RequestBody MaintenanceRecord maintenanceRecord) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("update Vehicle maintenance record for id:" + id + "|MaintenanceRecord" + maintenanceRecord);
-        }
+        logger.info("update Vehicle maintenance record for id:" + id + "|MaintenanceRecord" + maintenanceRecord);
         MaintenanceRecord updateMaintenanceRecord = vehicleMaintenanceService.updateMaintenanceRecord(id, maintenanceRecord);
         if (updateMaintenanceRecord == null) {
             return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
@@ -51,9 +50,7 @@ public class VehicleMaintenanceResource {
 
     @GetMapping(value = "/get/{id}")
     public ResponseEntity<?> getMaintenanceRecord(@PathVariable Long id) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Get Vehicle Maintenance Record for id:" + id);
-        }
+        logger.info("Get Vehicle Maintenance Record for id:" + id);
         Optional<MaintenanceRecord> optionalMaintenanceRecord = vehicleMaintenanceService.getMaintenanceRecord(id);
         if (optionalMaintenanceRecord.isEmpty()) {
             return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
@@ -62,11 +59,16 @@ public class VehicleMaintenanceResource {
         }
     }
 
+    @GetMapping(value = "/search/{vehicleId}")
+    public ResponseEntity<?> searchMaintenanceRecordsForVehicle(@PathVariable Long vehicleId) {
+        logger.info("Get Vehicle Maintenance Records for vehicleId:" + vehicleId);
+        List<MaintenanceRecord> records = vehicleMaintenanceService.searchMaintenanceRecordsForVehicle(vehicleId);
+        return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, records), HttpStatus.OK);
+    }
+
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<?> deleteVehicle(@PathVariable Long id) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Delete vehicle maintenance record for id:" + id);
-        }
+        logger.info("Delete vehicle maintenance record for id:" + id);
         vehicleMaintenanceService.deleteMaintenanceRecord(id);
         return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, null), HttpStatus.OK);
     }
