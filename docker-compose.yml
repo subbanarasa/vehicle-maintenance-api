@@ -1,0 +1,8 @@
+ersion: '2.1'
+
+services:
+  vehicle-maintenance:
+    image: <<image name>>
+    ports:
+      - "8080:8080"
+
