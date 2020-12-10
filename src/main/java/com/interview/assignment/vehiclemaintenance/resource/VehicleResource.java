@@ -50,10 +50,10 @@ public class VehicleResource {
     public ResponseEntity<?> getVehicle(@PathVariable Long id) {
         logger.info("Get Vehicle for id:" + id);
         Optional<Vehicle> optionalVehicle = vehicleService.getVehicle(id);
-        if (optionalVehicle.isEmpty()) {
-            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
-        } else {
+        if (optionalVehicle.isPresent()) {
             return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, optionalVehicle.get()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
         }
     }
 

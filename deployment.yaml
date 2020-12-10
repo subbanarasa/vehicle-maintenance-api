@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vehicle-maintenance
+spec:
+  selector:
+    matchLabels:
+      app: vehicle-maintenance
+  revisionHistoryLimit: 1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vehicle-maintenance
+    spec:
+      containers:
+        - name: vehicle-maintenance
+          image: ${DOCKER_REGISTRY}/vehicle-maintenance:${VERSION}
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config/
+            - name: logs
+              mountPath: /logs/
+      volumes:
+        - name: config-volume
+          configMap:
+            name: vehicle-maintenance-configmap
+        - name: logs
+          persistentVolumeClaim:
+            claimName: vehicle-maintenance-log-pvc
+      restartPolicy: Always

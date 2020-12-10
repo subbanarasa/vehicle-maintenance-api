@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vehicle-maintenance-configmap
+  labels:
+    app: vehicle-maintenance
+data:
+  application.properties: |-
+    # logging level
+    logging.level.org.springframework=INFO
+    logging.level.com.interview.assignment.vehiclemaintenance=INFO
+    logging.pattern.file=%d %p %c{1.} [%t] %m%n
+    logging.pattern.console=%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+    server.port=8080
+    spring.application.name=vehicle-maintenance
+    management.endpoints.web.exposure.include=*
+    # H2
+    spring.h2.console.enabled=true
+    spring.h2.console.path=/h2
+    # Datasource
+    spring.datasource.url=jdbc:h2:mem:testdb
+    spring.datasource.username=sa
+    spring.datasource.password=
+    spring.datasource.driver-class-name=org.h2.Driver
+
+

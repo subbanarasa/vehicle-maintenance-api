@@ -53,7 +53,7 @@ public class VehicleOwnershipResource {
     public ResponseEntity<StatusModel> getVehiclesForOwner(@PathVariable long ownerId) {
         logger.info("Get vehicles for owner Id: {}", ownerId);
         List<Vehicle> vehicleList = vehicleOwnershipService.getVehiclesForOwner(ownerId);
-        return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.SUCCESS_MSG, vehicleList), HttpStatus.OK);
+        return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, vehicleList), HttpStatus.OK);
 
     }
 
@@ -61,7 +61,7 @@ public class VehicleOwnershipResource {
     public ResponseEntity<StatusModel> deleteVehicleOwnership(@PathVariable Long id) {
         logger.info("Delete vehicle ownership for ID: {}", id);
         vehicleOwnershipService.deleteVehicleOwnership(id);
-        return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.SUCCESS_MSG), HttpStatus.OK);
+        return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG), HttpStatus.OK);
     }
 
 }

@@ -50,10 +50,10 @@ public class UserResource {
     public ResponseEntity<?> getUser(@PathVariable Long id) {
         logger.info("Get user for id:" + id);
         Optional<User> optionalUser = userService.getUser(id);
-        if (optionalUser.isEmpty()) {
-            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
-        } else {
+        if (optionalUser.isPresent()) {
             return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, optionalUser.get()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
         }
     }
 

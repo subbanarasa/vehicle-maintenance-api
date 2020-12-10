@@ -31,7 +31,7 @@ public class VehicleMaintenanceResource {
         }
         MaintenanceRecord saveMaintenanceRecord = vehicleMaintenanceService.saveMaintenanceRecord(maintenanceRecord);
         if (saveMaintenanceRecord == null) {
-            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
+            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, saveMaintenanceRecord), HttpStatus.OK);
         }
@@ -42,7 +42,7 @@ public class VehicleMaintenanceResource {
         logger.info("update Vehicle maintenance record for id:" + id + "|MaintenanceRecord" + maintenanceRecord);
         MaintenanceRecord updateMaintenanceRecord = vehicleMaintenanceService.updateMaintenanceRecord(id, maintenanceRecord);
         if (updateMaintenanceRecord == null) {
-            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
+            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, updateMaintenanceRecord), HttpStatus.OK);
         }
@@ -52,10 +52,10 @@ public class VehicleMaintenanceResource {
     public ResponseEntity<?> getMaintenanceRecord(@PathVariable Long id) {
         logger.info("Get Vehicle Maintenance Record for id:" + id);
         Optional<MaintenanceRecord> optionalMaintenanceRecord = vehicleMaintenanceService.getMaintenanceRecord(id);
-        if (optionalMaintenanceRecord.isEmpty()) {
-            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG, null), HttpStatus.OK);
-        } else {
+        if (optionalMaintenanceRecord.isPresent()) {
             return new ResponseEntity<>(new StatusModel(Constants.SUCCESS, Constants.SUCCESS_MSG, optionalMaintenanceRecord.get()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new StatusModel(Constants.FAILED, Constants.FAILED_MSG), HttpStatus.OK);
         }
     }
 
