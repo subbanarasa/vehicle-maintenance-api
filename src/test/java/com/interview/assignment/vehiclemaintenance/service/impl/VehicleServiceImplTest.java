@@ -65,7 +65,8 @@ public class VehicleServiceImplTest {
         Vehicle vehicleExpected = new Vehicle();
         vehicleExpected.setVehicleId(1l);
         vehicleExpected.setRegistrationNumber("KA50N1542");
-        ;
+
+        when(vehicleRepository.existsById(1l)).thenReturn(true);
         when(vehicleRepository.findById(1l)).thenReturn(Optional.of(vehicleExpected));
         when(vehicleRepository.save(vehicleExpected)).thenReturn(vehicleExpected);
         Vehicle vehicle = vehicleService.updateVehicle(vehicleExpected.getVehicleId(), vehicleExpected);
